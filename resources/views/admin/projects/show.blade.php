@@ -27,6 +27,7 @@
             <p>Nessuna complessità selezionata</p>
             @endif
         </div>
+        
         <div class="d-flex justify-content-center">
             <a href="{{ route('admin.projects.index') }}" class="btn btn-primary">Torna alla Dashboard</a>
         </div>

@@ -33,6 +33,7 @@ class UpdateProjectRequest extends FormRequest
             'description' => 'required|string|min:5',
             'name_client' => 'required|string|min:1',
             'types_id' => 'nullable|exists:types,id',
+            'technologies' => 'nullable|exists:technologies,id',
         ];
     }
 }
