@@ -47,7 +47,7 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request)
     {
         $data = $request->validated();
-        dd($data);
+        
         $img_path = Storage::disk('public')->put('uploads', $data['cover_image']);
 
         $new_project = new Project;
@@ -57,6 +57,10 @@ class ProjectController extends Controller
         $new_project->cover_image = $img_path;
         
         $new_project->save();
+
+        if( isset($data['technologies'])) {
+            $new_project->technologies()->sync($data['technologies']);
+        }
 
         return redirect()->route('admin.projects.index')->with('message', "Il progetto: $new_project->name, è stato aggiunto con successo!");
     }
@@ -81,8 +85,9 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $types = Type::all();
+        $technologies = Technology::all();
 
-        return view('admin.projects.edit', compact('project', 'types'));
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
 
     /**
@@ -99,6 +104,12 @@ class ProjectController extends Controller
         $project->slug = Str::slug($data['name']);
 
         $project->update($data);
+
+        if( isset($data['technologies'])) {
+            $project->technologies()->sync($data['technologies']);
+        } else {
+            $project->technologies()->sync([]);
+        }
 
         return redirect()->route('admin.projects.index')->with('message', "Il progetto: $project->name, è stato modificato con successo!");
     }
